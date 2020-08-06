@@ -5,6 +5,7 @@ import sys
 LDI = 0b10000010  # LDI R0,8 130
 PRN = 0b01000111  # PRN R0, 71
 HLT = 0b00000001  # HLT
+MUL = 0b10100010  # Multiply
 
 
 class CPU:
@@ -18,7 +19,7 @@ class CPU:
         self.pc = 0
         pass
 
-    def load(self):
+    def load(self, filename = None):
         """Load a program into memory."""
 
         address = 0
@@ -51,6 +52,8 @@ class CPU:
         if op == "ADD":
             self.reg[reg_a] += self.reg[reg_b]
         #elif op == "SUB": etc
+        elif op == "MUL":
+            self.reg[reg_a] *= self.reg[reg_b]
         else:
             raise Exception("Unsupported ALU operation")
 
@@ -76,7 +79,7 @@ class CPU:
 
     def run(self):
         """Run the CPU."""
-        self.load(filename)
+        # self.load(filename)
         running = True 
 
         while running: 
