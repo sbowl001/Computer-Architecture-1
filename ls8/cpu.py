@@ -24,6 +24,15 @@ class CPU:
 
         address = 0
 
+        with open(filename) as fp: 
+            for line in fp:
+                # line . split 
+                # by some sign 
+                # strip those 
+                # if strip value = () , continue 
+                # self.ram[address] =  value that you get 
+                # address += 1 
+
         # For now, we've just hardcoded a program:
 
         program = [
@@ -97,4 +106,9 @@ class CPU:
         elif ir == PRN: 
             print(self.reg[self.ram_read(pc + 1)])
             self.pc += 2
+        elif ir == MUL: 
+            a = self.ram_read(pc + 1)
+            b = self.ram_read(pc + 2)
+            self.alu('MUL', a, b)
+            self.pc += 3 
         pass
