@@ -1,6 +1,7 @@
 """CPU functionality."""
 
 import sys
+print(sys.argv)
 
 LDI = 0b10000010  # LDI R0,8 130
 PRN = 0b01000111  # PRN R0, 71
@@ -24,6 +25,7 @@ class CPU:
 
         try: 
             address = 0
+            # filename = sys.argv[1]
 
             with open(filename) as fp: 
                 for line in fp:
@@ -45,27 +47,24 @@ class CPU:
             sys.exit(2)
 
         # For now, we've just hardcoded a program:
-''' don't need this anymore? 
-        program = [
-            # From print8.ls8
-            0b10000010, # LDI R0,8
-            0b00000000,
-            0b00001000,
-            0b01000111, # PRN R0
-            0b00000000,
-            0b00000001, # HLT
-        ]
+#  don't need this anymore? 
+#         program = [
+#             # From print8.ls8
+#             0b10000010, # LDI R0,8
+#             0b00000000,
+#             0b00001000,
+#             0b01000111, # PRN R0
+#             0b00000000,
+#             0b00000001, # HLT
+#         ]
 
-        for instruction in program:
-            self.ram[address] = instruction
-            address += 1
-'''
+#         for instruction in program:
+#             self.ram[address] = instruction
+#             address += 1
     def ram_read(self, mar):
         return self.ram[mar]
-
     def ram_write(self, mar, mdr):
         self.ram[mar] = mdr 
-
     def alu(self, op, reg_a, reg_b):
         """ALU operations."""
 
@@ -97,29 +96,30 @@ class CPU:
 
         print()
 
-    def run(self, filename):
+    def run(self):
         """Run the CPU."""
-        self.load(filename)
-        running = True 
+        self.load(sys.argv[1])
+        # self.load()
+        # running = True 
 
-        while running: 
+        while True: 
             pc = self.pc 
             ir = self.ram_read(pc)
         # LDI
-        if ir == LDI: 
-            self.reg[self.ram_read(pc + 1)] = self.ram_read(pc + 2)
-            self.pc += 3
+            if ir == LDI: 
+                self.reg[self.ram_read(pc + 1)] = self.ram_read(pc + 2)
+                self.pc += 3
         # HLT
-        elif ir == HLT: 
-            running = False
-            sys.exit(1)
+            elif ir == HLT: 
+                # running = False
+                sys.exit(1)
         # PRN
-        elif ir == PRN: 
-            print(self.reg[self.ram_read(pc + 1)])
-            self.pc += 2
-        elif ir == MUL: 
-            a = self.ram_read(pc + 1)
-            b = self.ram_read(pc + 2)
-            self.alu('MUL', a, b)
-            self.pc += 3 
-        pass
+            elif ir == PRN: 
+                print(self.reg[self.ram_read(pc + 1)])
+                self.pc += 2
+            elif ir == MUL: 
+                a = self.ram_read(pc + 1)
+                b = self.ram_read(pc + 2)
+                self.alu('MUL', a, b)
+                self.pc += 3 
+   
