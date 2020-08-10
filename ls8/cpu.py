@@ -22,19 +22,30 @@ class CPU:
     def load(self, filename = None):
         """Load a program into memory."""
 
-        address = 0
+        try: 
+            address = 0
 
-        with open(filename) as fp: 
-            for line in fp:
+            with open(filename) as fp: 
+                for line in fp:
+                    comment_split = line.split("#")
                 # line . split 
                 # by some sign 
+                    num = comment_split[0].strip()
                 # strip those 
+                    if num == '':
+                        continue  
                 # if strip value = () , continue 
+                    val = int(num, 2)
+                    self.ram[address] = val 
+                    address += 1 
                 # self.ram[address] =  value that you get 
                 # address += 1 
+        except FileExistsError:
+            print('Error file not found')
+            sys.exit(2)
 
         # For now, we've just hardcoded a program:
-
+''' don't need this anymore? 
         program = [
             # From print8.ls8
             0b10000010, # LDI R0,8
@@ -48,7 +59,7 @@ class CPU:
         for instruction in program:
             self.ram[address] = instruction
             address += 1
-
+'''
     def ram_read(self, mar):
         return self.ram[mar]
 
@@ -86,9 +97,9 @@ class CPU:
 
         print()
 
-    def run(self):
+    def run(self, filename):
         """Run the CPU."""
-        # self.load(filename)
+        self.load(filename)
         running = True 
 
         while running: 
