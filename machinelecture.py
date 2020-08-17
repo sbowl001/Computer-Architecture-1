@@ -135,6 +135,32 @@ while running:
         second_reg_idx = memory[pc + 2]
 ​
         registers[first_reg_idx] += registers[second_reg_idx]
+
+    if command == PUSH:
+        # decrement the pointer
+        registers[7] -= 1 
+
+        # look ahead in memory at the register number 
+        register_number = memory[pc +1]
+        # get value from register, copy into stack 
+        number_to_push = registers[register_number]
+
+        # copy into stack 
+        SP = registers[7]
+        memory[SP] = number_to_push
+
+    elif command == POP: 
+        SP = register[7]
+
+        popped_value = memory[SP]
+
+        # get the register number 
+        # self.ram[pc + 1]
+        register_number = memory[pc + 1]
+        registers[register_number] = popped_value 
+        # copy into a register 
+        registers[7] += 1 
+    
 ​
     if command == HALT:
         running = False
